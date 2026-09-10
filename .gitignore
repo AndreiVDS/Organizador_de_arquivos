@@ -1,0 +1,11 @@
+# artefatos de build do PyInstaller (gerados)
+build/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# log gerado pela própria ferramenta
+extensoes.txt
