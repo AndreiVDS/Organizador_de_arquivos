@@ -1,33 +1,54 @@
 # File Organizer
 
-A desktop utility that **sorts a folder's files into category subfolders** — run it once
-over an existing mess, or leave it running to tidy new files as they land.
+A command-line tool that **sorts a folder's files into category subfolders** — run it once
+over a mess, or leave it running to tidy new files as they land.
 
-## What it does
-
-- Pick a folder through a native dialog (Tkinter).
-- Files are moved into subfolders by extension:
-  `Arquivos de Códigos`, `texto e xml`, `Arquivos Compactados`, `pdf`, `audio`, `imagens`,
-  `videos`, `Documentos do word`, `Planilhas`, `Arquivos de apresentação`,
-  `Arquivos do Windows`, and `outros` for everything else.
-- Unknown extensions are logged to `outros/extensoes.txt`.
-- **Watch mode**: uses `watchdog` to keep organising files that appear later, in the background.
-- Move is retried on transient `PermissionError` (file still in use).
-
-## Stack
-
-`Python 3` · `watchdog` · `tkinter` · `shutil` / `os` · packaged for Windows with **PyInstaller**
-
-## Running
+## Use
 
 ```bash
-pip install watchdog
-python main2.py
+organizar ~/Downloads                  # sort once
+organizar ~/Downloads --dry-run        # print the plan, move nothing
+organizar ~/Downloads --watch          # sort, then keep sorting new files (Ctrl+C to stop)
+organizar . --only imagem,video        # restrict to some categories
+organizar . --recursive                # also sweep files already in subfolders
+organizar . --categories my.json       # custom extension → folder map
 ```
 
-A prebuilt Windows executable is under `dist/Organizador.exe`; rebuild with `pyinstaller main2.spec`.
+Files go into `Imagens/`, `Vídeos/`, `PDF/`, `Códigos/`, `Planilhas/`, … and anything
+unrecognised into `outros/`. Name clashes are never overwritten (`report.pdf` →
+`report (1).pdf`). A file being written by another process is retried a few times.
 
-## Note
+### Custom categories
 
-`build/` and `dist/` are committed for convenience but are generated artifacts — add them to
-`.gitignore` if you fork this.
+```json
+{
+  "livros":  { "folder": "Livros",  "extensions": [".epub", ".mobi", ".pdf"] },
+  "imagens": { "folder": "Fotos",   "extensions": [".jpg", ".png", ".heic"] }
+}
+```
+
+## Design
+
+```
+organizador/
+  categories.py   the extension → folder map (built-in or from JSON), with --only filtering
+  organizer.py    plan(folder) -> [Move]  (no side effects)  ·  apply(moves, dry_run=…)
+  watcher.py      watchdog handler that runs the same logic on new files
+  cli.py          argparse front-end
+organizar.py      entry point (also the PyInstaller target)
+```
+
+`plan()` and `apply()` are separate on purpose: `--dry-run` is just `apply(..., dry_run=True)`,
+and the tests drive `plan`/`apply` against a temp directory with no mocking.
+
+## Install / develop
+
+```bash
+pip install -e .            # gives you the `organizar` command
+python organizar.py --help  # or run it directly
+
+pip install -e ".[dev]" && pytest   # 11 tests
+```
+
+A prebuilt Windows executable is in `dist/Organizador.exe`; rebuild with
+`pyinstaller organizar.spec`.

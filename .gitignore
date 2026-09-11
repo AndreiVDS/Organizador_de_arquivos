@@ -1,11 +1,13 @@
-# artefatos de build do PyInstaller (gerados)
-build/
-
 # python
 __pycache__/
 *.pyc
+*.egg-info/
 .venv/
 venv/
+.pytest_cache/
 
-# log gerado pela própria ferramenta
+# PyInstaller artifacts (generated)
+build/
+
+# log written by the tool itself
 extensoes.txt
