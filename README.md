@@ -55,5 +55,4 @@ python organizar.py --help  # or run it directly
 pip install -e ".[dev]" && pytest   # 11 tests
 ```
 
-A prebuilt Windows executable is in `dist/Organizador.exe`; rebuild with
-`pyinstaller organizar.spec`.
+Build a standalone executable with `pyinstaller organizar.spec` (output in `dist/`).

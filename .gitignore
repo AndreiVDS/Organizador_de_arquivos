@@ -11,3 +11,6 @@ build/
 
 # log written by the tool itself
 extensoes.txt
+
+# PyInstaller output (rebuild with: pyinstaller organizar.spec)
+dist/
