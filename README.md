@@ -1,5 +1,10 @@
 # File Organizer
 
+[![CI](https://github.com/AndreiVDS/Organizador_de_arquivos/actions/workflows/ci.yml/badge.svg)](https://github.com/AndreiVDS/Organizador_de_arquivos/actions/workflows/ci.yml)
+![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
+![tests](https://img.shields.io/badge/tests-11_passing-6e9f18)
+![license](https://img.shields.io/badge/license-MIT-blue)
+
 A command-line tool that **sorts a folder's files into category subfolders** — run it once
 over a mess, or leave it running to tidy new files as they land.
 
